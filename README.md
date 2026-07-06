@@ -1,5 +1,5 @@
-Expression ( 2*(u(1)-minulaz)/(maxulaz-minulaz)-1)
- Expression ((u(1)+1)*(maxizlaz-minizlaz)/2+minizlaz)
+( 2*(u(1)-minulaz)/(maxulaz-minulaz)-1)
+((u(1)+1)*(maxizlaz-minizlaz)/2+minizlaz)
 
 P=[y(:,1)]; 
 T=[y(:,2)]; 
