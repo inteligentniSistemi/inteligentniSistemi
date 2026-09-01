@@ -1,0 +1,26 @@
+% ===== PID PARAMETRI - Ziegler-Nichols tangentna metoda =====
+
+% t i y su vektori step odziva (iz To Workspace bloka)
+y = y(:); t = t(:);
+
+K = y(end);                 % staticko pojacanje (~0.5)
+dy = gradient(y, t);        % nagib u svakoj tacki
+[R, i] = max(dy);           % tacka prevoja (najveci nagib)
+t0 = t(i); y0 = y(i);
+
+L = t0 - y0/R;              % mrtvo vrijeme (dead time)
+T = K/R;                    % vremenska konstanta
+
+% Ziegler-Nichols tablica za PID
+Kp = 1.2T/(KL);
+Ti = 2L;
+Td = 0.5L;
+Ki = Kp/Ti;
+Kd = Kp*Td;
+
+% Ispis
+fprintf('L  = %.4f s\n', L);
+fprintf('T  = %.4f s\n', T);
+fprintf('Kp = %.4f\n', Kp);
+fprintf('Ki = %.4f\n', Ki);
+fprintf('Kd = %.4f\n', Kd);
