@@ -1,0 +1,79 @@
+%% ============================================================
+%%  upisivanjePravila.m  -  UNIVERZALNA skripta za fuzzy pravila
+%% ============================================================
+%%  KAKO SE KORISTI (za bilo koji zadatak):
+%%
+%%  1. U polje FIS_FAJL upisi ime svog .fis fajla.
+%%
+%%  2. U blok "pravila" pisi pravila po ovom obrascu:
+%%       "ulaz1==skup & ulaz2==skup => izlaz=skup"
+%%     - koristi == izmedju varijable i skupa
+%%     - koristi &  za "i" (and),  |  za "ili" (or)
+%%     - => razdvaja uslov od rezultata
+%%     - NE moras navesti sve ulaze; nenavedeni se ignorisu
+%%     - VELIKA i mala slova su BITNA - imena moraju TACNO
+%%       odgovarati imenima u .fis fajlu (i varijable i skupovi)
+%%
+%%  3. Pritisni Run. Ispisace koliko je pravila dodato.
+%%
+%%  PRIMJER JEDNOG PRAVILA:
+%%     "cijena==niska & procesor==dobar => odluka=dobro"
+%% ============================================================
+
+FIS_FAJL = 'fuzzySistem.fis';      %% <--- ime tvog .fis fajla
+
+fis = readfis(FIS_FAJL);
+
+pravila = [ ...
+    "cijena==niska & procesor==los & ekran==manji & memorija==mala & tip_racunara==laptop & stanje==polovno => odluka=lose"
+    "cijena==srednja & procesor==srednji & ekran==srednji & memorija==srednja & tip_racunara==desktop & stanje==novo => odluka=srednje"
+    "cijena==visoka & procesor==dobar & ekran==veliki & memorija==velika & tip_racunara==gaming & stanje==novo => odluka=dobro"
+    "procesor==dobar & memorija==velika => odluka=dobro"
+    "procesor==los & memorija==mala => odluka=lose"
+    "procesor==srednji & memorija==srednja => odluka=srednje"
+    "tip_racunara==gaming & stanje==novo => odluka=dobro"
+    "tip_racunara==laptop & stanje==polovno => odluka=lose"
+    "procesor==dobar & cijena==visoka => odluka=dobro"
+    "procesor==los & cijena==niska => odluka=lose"
+    "memorija==velika & ekran==veliki => odluka=dobro"
+    "memorija==mala & ekran==manji => odluka=lose"
+    "procesor==dobar & stanje==novo => odluka=dobro"
+    "procesor==los & stanje==polovno => odluka=lose"
+    "tip_racunara==gaming & procesor==dobar => odluka=dobro"
+    "cijena==visoka & stanje==polovno => odluka=srednje"
+    "cijena==niska & procesor==srednji => odluka=lose"
+    "memorija==srednja & procesor==dobar => odluka=dobro"
+    "ekran==srednji & tip_racunara==desktop => odluka=srednje"
+    "procesor==srednji & tip_racunara==gaming => odluka=dobro"
+    "memorija==mala & stanje==polovno => odluka=lose"
+    "procesor==dobar & cijena==niska & stanje==novo => odluka=srednje"
+    "procesor==srednji & memorija==srednja & tip_racunara==gaming => odluka=srednje"
+    "procesor==srednji & ekran==manji & memorija==mala => odluka=lose"
+    "cijena==visoka & stanje==polovno & procesor==srednji => odluka=srednje"
+    "cijena==niska & procesor==srednji & memorija==srednja => odluka=lose"
+    "procesor==dobar & ekran==veliki & memorija==srednja => odluka=dobro"
+    "procesor==los & ekran==srednji & memorija==srednja => odluka=lose"
+    "cijena==srednja & procesor==srednji & tip_racunara==desktop => odluka=srednje"
+    "procesor==dobar & memorija==srednja & stanje==novo => odluka=dobro"
+    "procesor==srednji & memorija==velika & tip_racunara==gaming & stanje==novo => odluka=dobro"
+    "cijena==niska & procesor==los & memorija==mala & stanje==polovno => odluka=lose"
+    "cijena==visoka & procesor==dobar & memorija==velika & tip_racunara==gaming => odluka=dobro"
+    "procesor==los & ekran==manji & tip_racunara==laptop => odluka=lose"
+    "procesor==dobar & ekran==veliki & tip_racunara==gaming => odluka=dobro"
+    "cijena==srednja & memorija==srednja & ekran==srednji => odluka=srednje"
+    "procesor==srednji & memorija==mala & stanje==novo => odluka=srednje"
+    "procesor==dobar & memorija==velika & stanje==polovno => odluka=srednje"
+    "cijena==visoka & procesor==srednji & ekran==srednji => odluka=srednje"
+    "procesor==los & memorija==srednja & tip_racunara==desktop & stanje==novo => odluka=srednje"
+    "cijena==niska & procesor==dobar & memorija==velika & tip_racunara==gaming => odluka=dobro"
+    "procesor==srednji & ekran==veliki & memorija==velika => odluka=dobro"
+    "procesor==los & cijena==visoka & stanje==polovno => odluka=lose"
+    "memorija==velika & tip_racunara==gaming & stanje==novo => odluka=dobro"
+    "memorija==mala & tip_racunara==laptop & stanje==polovno => odluka=lose"
+    "procesor==dobar & cijena==srednja & ekran==srednji & stanje==novo => odluka=dobro"
+    "procesor==srednji & cijena==niska & memorija==mala => odluka=lose"
+];
+
+fis = addRule(fis, pravila);
+writeFIS(fis, FIS_FAJL);           %% ako pukne: writefis(fis, FIS_FAJL)
+disp("Gotovo! Ukupno pravila u sistemu: " + numel(fis.Rules));
