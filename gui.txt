@@ -1,0 +1,65 @@
+% 1. Procitaj ulaze
+cijena       = app.cijenaField.Value;
+procesor     = app.procesorField.Value;
+ekran        = app.ekranField.Value;
+memorija     = app.memorijaField.Value;
+tip_racunara = app.tipField.Value;
+stanje       = app.stanjeField.Value;
+
+% 2. FUZZY (direktno)
+fis = readfis('fuzzySistem.fis');
+izlazFuzzy = evalfis(fis, [cijena procesor ekran memorija tip_racunara stanje]);
+
+% 3. ANN + EKSPERTNI (preko modelDrugi)
+assignin('base','cijena',cijena);
+assignin('base','procesor',procesor);
+assignin('base','ekran',ekran);
+assignin('base','memorija',memorija);
+assignin('base','tip_racunara',tip_racunara);
+assignin('base','stanje',stanje);
+
+out = sim('modelDrugi');
+izlazAnn = out.izlazSim1(1);   % ANN
+izlazEs  = out.izlazSim(1);    % ekspertni
+
+% 4. Upisi BROJEVE
+app.vrijednost1Field.Value = izlazFuzzy;
+app.vrijednost2Field.Value = izlazAnn;
+app.vrijednost3Field.Value = izlazEs;
+
+% 5. Prevedi u RIJECI i upisi
+brojevi = [izlazFuzzy, izlazAnn, izlazEs];
+rijeci  = strings(1,3);
+for i = 1:3
+    if brojevi(i) < 2.5
+        rijeci(i) = "Lose";
+    elseif brojevi(i) < 4
+        rijeci(i) = "Srednje";
+    else
+        rijeci(i) = "Dobro";
+    end
+end
+app.fuzzyField.Value     = char(rijeci(1));
+app.annField.Value       = char(rijeci(2));
+app.ekspertniField.Value = char(rijeci(3));
+
+
+
+
+
+app.cijenaField.Value   = 0;
+app.procesorField.Value = 0;
+app.ekranField.Value    = 0;
+app.memorijaField.Value = 0;
+app.tipField.Value      = 0;
+app.stanjeField.Value   = 0;
+app.vrijednost1Field.Value = 0;
+app.vrijednost2Field.Value = 0;
+app.vrijednost3Field.Value = 0;
+app.fuzzyField.Value     = '';
+app.annField.Value       = '';
+app.ekspertniField.Value = '';
+
+
+
+delete(app);
